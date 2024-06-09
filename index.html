@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiles</title>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+
+        background-color: gray;
+      }
+
+      canvas {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <script src="./libs/p5.min.js"></script>
+
+    <script src="./Tile.js"></script>
+
+    <script>
+      function initializeTiles(numberOfTiles, tileSize) {
+        const tiles = [];
+
+        const MARGIN = 10;
+        const NUMBER_OF_ROW = 3;
+        const NUMBER_OF_COL = 3;
+        const MIDDLE_ROW_INDEX = (NUMBER_OF_ROW - 1) / 2;
+        const MIDDLE_COL_INDEX = (NUMBER_OF_ROW - 1) / 2;
+
+        for (let i = 0; i < numberOfTiles; i++) {
+          const rowIndex = i % NUMBER_OF_ROW;
+          const colIndex = Math.floor(i / NUMBER_OF_COL);
+
+          const rowOperator =
+            rowIndex === MIDDLE_ROW_INDEX
+              ? 0
+              : rowIndex < MIDDLE_ROW_INDEX
+              ? -1
+              : 1;
+          const colOperator =
+            colIndex === MIDDLE_COL_INDEX
+              ? 0
+              : colIndex < MIDDLE_COL_INDEX
+              ? -1
+              : 1;
+
+          const unit = tileSize + MARGIN;
+
+          const x = unit * rowOperator;
+          const y = unit * colOperator;
+
+          console.log(x, y);
+
+          const tile = new Tile(x, y);
+
+          tiles.push(tile);
+        }
+
+        return tiles;
+      }
+    </script>
+
+    <script>
+      let tiles = [];
+
+      const NUMBER_OF_TILES = 9;
+      const TILE_SIZE = 50;
+
+      function setup() {
+        createCanvas(300, 300, WEBGL);
+        background(999);
+
+        tiles = [...initializeTiles(NUMBER_OF_TILES, TILE_SIZE)];
+      }
+
+      function draw() {
+        background(999);
+
+        // orbitControl();
+
+        tiles.forEach((tile) => {
+          tile.draw();
+        });
+      }
+    </script>
+  </body>
+</html>
