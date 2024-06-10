@@ -6,6 +6,10 @@
     <title>Tiles</title>
 
     <style>
+      * {
+        touch-action: manipulation;
+      }
+
       html,
       body {
         margin: 0;
@@ -24,16 +28,19 @@
         transform: translate(-50%, -50%);
       }
     </style>
+
+    <script src="/components/Layout.js"></script>
   </head>
   <body>
-    <script src="./libs/p5.min.js"></script>
+    <app-layout></app-layout>
 
+    <script src="./libs/p5.min.js"></script>
     <script src="./Tile.js"></script>
 
     <script>
       let TILE_SIZE;
-      let NUMBER_OF_ROW = 15;
-      let NUMBER_OF_COL = 15;
+      let NUMBER_OF_ROW = 23;
+      let NUMBER_OF_COL = 23;
       const NUMBER_OF_TILES = NUMBER_OF_ROW * NUMBER_OF_COL;
       const MARGIN = 0;
     </script>
@@ -51,8 +58,6 @@
 
           const rowDifference = MIDDLE_ROW_INDEX - rowIndex;
           const colDifference = MIDDLE_COL_INDEX - colIndex;
-
-          console.log(rowDifference, colDifference)
 
           const unit = tileSize + MARGIN;
 
