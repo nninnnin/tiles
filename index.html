@@ -12,6 +12,9 @@
         padding: 0;
 
         background-color: gray;
+
+        overflow: hidden;
+        overscroll-behavior: none;
       }
 
       canvas {
@@ -28,40 +31,35 @@
     <script src="./Tile.js"></script>
 
     <script>
+      let TILE_SIZE;
+      let NUMBER_OF_ROW = 15;
+      let NUMBER_OF_COL = 15;
+      const NUMBER_OF_TILES = NUMBER_OF_ROW * NUMBER_OF_COL;
+      const MARGIN = 0;
+    </script>
+
+    <script>
       function initializeTiles(numberOfTiles, tileSize) {
         const tiles = [];
 
-        const MARGIN = 10;
-        const NUMBER_OF_ROW = 3;
-        const NUMBER_OF_COL = 3;
-        const MIDDLE_ROW_INDEX = (NUMBER_OF_ROW - 1) / 2;
-        const MIDDLE_COL_INDEX = (NUMBER_OF_ROW - 1) / 2;
+        const MIDDLE_ROW_INDEX = Math.floor((NUMBER_OF_ROW - 1) / 2);
+        const MIDDLE_COL_INDEX = Math.floor((NUMBER_OF_COL - 1) / 2);
 
         for (let i = 0; i < numberOfTiles; i++) {
-          const rowIndex = i % NUMBER_OF_ROW;
-          const colIndex = Math.floor(i / NUMBER_OF_COL);
+          const rowIndex = Math.floor(i / NUMBER_OF_COL);
+          const colIndex = i % NUMBER_OF_COL;
 
-          const rowOperator =
-            rowIndex === MIDDLE_ROW_INDEX
-              ? 0
-              : rowIndex < MIDDLE_ROW_INDEX
-              ? -1
-              : 1;
-          const colOperator =
-            colIndex === MIDDLE_COL_INDEX
-              ? 0
-              : colIndex < MIDDLE_COL_INDEX
-              ? -1
-              : 1;
+          const rowDifference = MIDDLE_ROW_INDEX - rowIndex;
+          const colDifference = MIDDLE_COL_INDEX - colIndex;
+
+          console.log(rowDifference, colDifference)
 
           const unit = tileSize + MARGIN;
 
-          const x = unit * rowOperator;
-          const y = unit * colOperator;
+          const x = unit * colDifference;
+          const y = unit * rowDifference;
 
-          console.log(x, y);
-
-          const tile = new Tile(x, y);
+          const tile = new Tile(x, y, tileSize);
 
           tiles.push(tile);
         }
@@ -73,22 +71,56 @@
     <script>
       let tiles = [];
 
-      const NUMBER_OF_TILES = 9;
-      const TILE_SIZE = 50;
-
       function setup() {
-        createCanvas(300, 300, WEBGL);
-        background(999);
+        const canvas = createCanvas(
+          window.innerWidth,
+          window.innerHeight,
+          WEBGL
+        );
 
-        tiles = [...initializeTiles(NUMBER_OF_TILES, TILE_SIZE)];
+        TILE_SIZE = (Math.max(width, height)) / NUMBER_OF_COL;
+
+        window.addEventListener("resize", () => {
+          resizeCanvas(window.innerWidth, window.innerHeight);
+
+          const TILE_SIZE = (Math.max(window.innerWidth, window.innerHeight)) / NUMBER_OF_COL;
+
+          tiles = [
+            ...initializeTiles(
+              NUMBER_OF_TILES,
+              TILE_SIZE
+            )
+          ];
+        });
+
+        background(999);
+        angleMode(DEGREES);
+
+        tiles = [
+          ...initializeTiles(
+            NUMBER_OF_TILES,
+            TILE_SIZE
+          )
+        ];
+
+        canvas.mousePressed(() => {
+          window.isMousePressed = true;
+        });
+
+        canvas.mouseReleased(() => {
+          window.isMousePressed = false;
+        });
       }
 
       function draw() {
-        background(999);
+        background(255, 210, 150);
+
+        point(mouseX - width / 2, mouseY - height / 2, 0);
 
         // orbitControl();
 
         tiles.forEach((tile) => {
+          tile.checkIsHovered();
           tile.draw();
         });
       }
