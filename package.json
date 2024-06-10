@@ -9,6 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.592.0"
+    "@aws-sdk/client-lambda": "^3.592.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "file-loader": "^6.2.0",
+    "html-loader": "^5.0.0"
   }
 }
